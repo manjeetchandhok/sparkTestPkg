@@ -39,46 +39,7 @@ public class Java7WordCount {
 		
 	}
 	
-	public static void wordCount_1() throws Exception {
-		String inputFile = "E:\\test2.txt";
-		String outputFile = "E:\\test3\\test2.txt";
-		SparkConf conf= new SparkConf().setMaster("local").setAppName("Test");
-		JavaSparkContext jsc= new JavaSparkContext(conf);
-		
-		Dataset<Row> df = conf.read().json("examples/src/main/resources/people.json");
-		JavaRDD<String>input=jsc.textFile(inputFile);
-		
-		SQLContext sqlContext =  new SQLContext(jsc);
-		Dataset<Row> urlsDF = sqlContext.createDataFrame(input, Url.class);
-		
-		
-		
-		JavaRDD<String> words=input.flatMap(new FlatMapFunction<String, String>() {
-
-			@Override
-			public Iterator<String> call(String t) throws Exception {
-				
-				return Arrays.asList(t.split(" ")).iterator();
-			}
-		});
-		
-		
-		words.mapToPair(new PairFunction<String, String, Integer>() {
-
-			@Override
-			public Tuple3< String, Integer> call(String t) throws Exception {
-				return new Tuple2(t,1);
-			}
-		}).reduceByKey(new Function2<Integer, Integer, Integer>() {
-			
-			@Override
-			public Integer call(Integer v1, Integer v2) throws Exception {
-				// TODO Auto-generated method stub
-				return v1+v2;
-			}
-		}).saveAsTextFile("E:\\test");
-		
-	}
+	
 	
 	public static void wordCount() throws Exception {
 		String inputFile = "E:\\test2.txt";
